@@ -10,11 +10,10 @@ class Chat < ApplicationRecord
         a = self.application
         if a.chats_count.nil? 
             a.chats_count = 1
-            a.save
         else
             a.chats_count += 1
-            a.save
         end
+        a.save
     end
 
 end

@@ -9,11 +9,10 @@ class Message < ApplicationRecord
         a = self.chat
         if a.messages_count.nil? 
             a.messages_count = 1
-            a.save
         else
             a.messages_count += 1
-            a.save
         end
+        a.save
     end
 
 end
