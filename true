@@ -1,0 +1,2 @@
+      invoke  active_record
+      create    db/migrate/20190920182503_add_index_to_applications.rb
