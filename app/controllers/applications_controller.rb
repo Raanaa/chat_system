@@ -1,6 +1,5 @@
 class ApplicationsController < ApplicationController
 
-
   #api :POST, '/projects/create/name'
   #description "Create new app"
   #param :name, String
@@ -17,7 +16,5 @@ class ApplicationsController < ApplicationController
     end
     render json:" Application created with token = #{@application.token}", status: :created
   end
-
-
 
 end

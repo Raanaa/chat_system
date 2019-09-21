@@ -5,8 +5,8 @@ class MessagesController < ApplicationController
   def create
 		begin
 			ActiveRecord::Base.transaction do
-				@message = Message.create!(chat_id: params[:id] , message_content: params[:message_content]) 
-      end
+				@message = Message.create!(chat_id: params[:id] , body: params[:body] )
+			end
     rescue => e #ActiveRecord::RecordNotUnique
       p e.message
       p e.backtrace
@@ -17,5 +17,17 @@ class MessagesController < ApplicationController
   end
 
 
+  def search
+    query = params[:q].present?
+    @messages = Message.search_messages(params[:q] , params[:id]) if query
+
+    found_msg = Hash.new
+    @messages.each do |b|
+      found_msg[b.number] = b.body
+    end
   
+    render json: "found #{found_msg.size} message ________ #{found_msg} "
+
+  end
+
 end
