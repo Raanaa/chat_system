@@ -1,11 +1,16 @@
 class MessagesController < ApplicationController
 
+  def show
+    @message = Message.find(params[:id])
+    render json: @message
+  end
+
   #api :POST, 'chats/:id/messages/create'
   #description "Create new message"
   def create
 		begin
 			ActiveRecord::Base.transaction do
-				@message = Message.create!(chat_id: params[:id] , body: params[:body] )
+				@message = Message.create!(chat_id: params[:chat_id] , body: params[:body] )
 			end
     rescue => e #ActiveRecord::RecordNotUnique
       p e.message

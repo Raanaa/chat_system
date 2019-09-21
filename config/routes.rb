@@ -1,26 +1,20 @@
 Rails.application.routes.draw do
  
-  post 'applications/create',  to: 'applications#create'
-  post 'applications/:id/chats/create',  to: 'chats#create'
-  post 'chats/:id/messages/create',  to: 'messages#create'
+  # post 'applications/create',  to: 'applications#create'
+  # post 'applications/:id/chats/create',  to: 'chats#create'
+  # post 'chats/:id/messages/create',  to: 'messages#create'
 
   get 'chats/:id/messages/search',  to: 'messages#search'
 
-  #get 'search', to: 'search#search'
-
-  # post 'messages/create'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
-
-
-  # resources :applications do
-  #   post 'create'
-  #   member do
-  #     post 'create'
-  #   end
-
-  #   resources :chats
-  # end
+  resources :applications do
+    post 'create',  on: :collection
+    resources :chats do
+      post 'create', on: :collection
+      resources :messages do
+        post 'create', on: :collection
+      end
+    end
+  end
 
 
 end

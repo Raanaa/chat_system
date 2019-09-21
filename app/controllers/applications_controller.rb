@@ -1,5 +1,10 @@
 class ApplicationsController < ApplicationController
 
+  def show
+    @app = Application.find(params[:id])
+    render json: @app
+  end
+
   #api :POST, '/projects/create/name'
   #description "Create new app"
   #param :name, String
