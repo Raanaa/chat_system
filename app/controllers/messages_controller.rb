@@ -1,7 +1,21 @@
 class MessagesController < ApplicationController
 
+  def index
+    messages = Message.all
+    render json: messages
+  end
+
   def show
-    @message = Message.find(params[:id])
+    chat = Chat.where(number: params[:chat_num] , application_id: Application.where(token: params[:token]).first.id).first
+    @message = Message.where(number: params[:msg_num] , chat_id: chat.id).first
+    render json: @message
+  end
+
+  def update
+    chat = Chat.where(number: params[:chat_num] , application_id: Application.where(token: params[:token]).first.id).first
+    @message = Message.where(number: params[:msg_num] , chat_id: chat.id).first
+    @message.body = params[:body]
+    @message.save
     render json: @message
   end
 
@@ -9,8 +23,9 @@ class MessagesController < ApplicationController
   #description "Create new message"
   def create
 		begin
-			ActiveRecord::Base.transaction do
-				@message = Message.create!(chat_id: params[:chat_id] , body: params[:body] )
+      ActiveRecord::Base.transaction do
+        chat = Chat.where(number: params[:chat_num] , application_id: Application.where(token: params[:token]).first.id).first
+				@message = Message.create!(chat_id: chat.id , body: params[:body] )
 			end
     rescue => e #ActiveRecord::RecordNotUnique
       p e.message
@@ -24,7 +39,8 @@ class MessagesController < ApplicationController
 
   def search
     query = params[:q].present?
-    @messages = Message.search_messages(params[:q] , params[:id]) if query
+    chat = Chat.where(number: params[:chat_num] , application_id: Application.where(token: params[:token]).first.id).first
+    @messages = Message.search_messages(params[:q] , chat.id) if query
 
     found_msg = Hash.new
     @messages.each do |b|
